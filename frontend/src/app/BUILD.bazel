@@ -1,0 +1,57 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
+load("@aspect_rules_js//js:defs.bzl", "js_library")
+
+SRCS = [
+    "page.tsx"
+]
+
+SPECS = [
+    "page.test.tsx",
+]
+
+js_library(
+    name = "styles",
+    srcs = ["page.module.css"]
+)
+
+ts_project(
+    name = "pages",
+    srcs = SRCS,
+    allow_js = True,
+    preserve_jsx = True,
+    resolve_json_module = True,
+    tsconfig = "//frontend:tsconfig",
+    deps = [
+        ":styles",
+        "//frontend:node_modules/@types/react",
+        "//frontend:node_modules/@types/react-dom",
+        "//frontend:node_modules/next"
+    ],
+)
+
+ts_project(
+    name = "specs",
+    srcs = SPECS,
+    allow_js = True,
+    preserve_jsx = True,
+    resolve_json_module = True,
+    tsconfig = "//frontend:tsconfig",
+    deps = [
+        ":pages",
+        "//frontend:node_modules/@testing-library/react",
+        "//frontend:node_modules/@types/jest",
+        "//frontend:node_modules/@testing-library/jest-dom",
+    ],
+)
+
+jest_test(
+    name = "jest_test",
+    config = "//frontend:jestconfig",
+    data = [
+        ":specs",
+        "//frontend:node_modules/jest-junit",
+    ],
+    node_modules = "//frontend:node_modules",
+    tags = ["jest"],
+)
