@@ -1,12 +1,13 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import type { NextPage } from 'next';
+import styles from './page.module.css';
+import Image from 'next/image';
 
-export default function Home() {
+ const Home: NextPage = () => {
   return (
-    <main className={styles.main}>
+    <main>
       <div className={styles.description}>
         <p>
-          Get started by editing&nbsp;
+          Get started by editingg&nbsp;
           <code className={styles.code}>src/app/page.tsx</code>
         </p>
         <div>
@@ -59,7 +60,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2>
-            Learn <span>-&gt;</span>
+            Learn a<span>-&gt;</span>
           </h2>
           <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
         </a>
@@ -89,7 +90,9 @@ export default function Home() {
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
         </a>
-      </div>
+      </div> 
     </main>
   )
 }
+
+export default Home;

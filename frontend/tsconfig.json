@@ -6,15 +6,15 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "declaration": true,
     "jsx": "preserve",
     "plugins": [
       {
@@ -27,7 +27,8 @@
       ]
     },
     "noEmit": false,
-    "incremental": false
+    "incremental": false,
+    "allowJs": true
   },
   "include": [
     "next-env.d.ts",

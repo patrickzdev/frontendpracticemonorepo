@@ -3,6 +3,7 @@ load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 
 SRCS = [
+    "layout.tsx",
     "page.tsx"
 ]
 
@@ -10,32 +11,29 @@ SPECS = [
     "page.test.tsx",
 ]
 
-js_library(
-    name = "styles",
-    srcs = ["page.module.css"]
-)
-
 ts_project(
     name = "pages",
     srcs = SRCS,
+    declaration = True,
+    resolve_json_module = True,
     allow_js = True,
     preserve_jsx = True,
-    resolve_json_module = True,
     tsconfig = "//frontend:tsconfig",
     deps = [
-        ":styles",
         "//frontend:node_modules/@types/react",
         "//frontend:node_modules/@types/react-dom",
-        "//frontend:node_modules/next"
+        "//frontend:node_modules/next",
     ],
+     visibility = ["//visibility:public"]
 )
 
 ts_project(
     name = "specs",
     srcs = SPECS,
+    declaration = True,
+    resolve_json_module = True,
     allow_js = True,
     preserve_jsx = True,
-    resolve_json_module = True,
     tsconfig = "//frontend:tsconfig",
     deps = [
         ":pages",
@@ -50,8 +48,17 @@ jest_test(
     config = "//frontend:jestconfig",
     data = [
         ":specs",
-        "//frontend:node_modules/jest-junit",
+        "//frontend:node_modules",
+        "//frontend:packagejson"
     ],
     node_modules = "//frontend:node_modules",
     tags = ["jest"],
 )
+
+js_library(
+    name = "styles",
+    srcs = ["globals.css", "page.module.css"],
+    visibility = ["//visibility:public"]
+
+)
+
