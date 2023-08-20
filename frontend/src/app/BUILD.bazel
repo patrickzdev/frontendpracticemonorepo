@@ -59,6 +59,5 @@ js_library(
     name = "styles",
     srcs = ["globals.css", "page.module.css"],
     visibility = ["//visibility:public"]
-
 )
 

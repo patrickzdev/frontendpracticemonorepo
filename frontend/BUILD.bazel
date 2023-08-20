@@ -33,7 +33,6 @@ js_run_devserver(
         "//frontend/src/app:pages",
         "//frontend/src/app:styles",
         "//frontend/public:public",
-
     ],
 )
 
