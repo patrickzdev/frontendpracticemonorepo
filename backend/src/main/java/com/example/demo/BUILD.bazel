@@ -5,7 +5,8 @@ java_library(
     deps = [
         "@maven//:org_springframework_spring_web",
         "@maven//:org_springframework_boot_spring_boot",
-        "@maven//:org_springframework_boot_spring_boot_autoconfigure"
+        "@maven//:org_springframework_boot_spring_boot_autoconfigure",
+        "@maven//:org_springframework_boot_spring_boot_starter_web"
     ],
 )
 
