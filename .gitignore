@@ -4,3 +4,4 @@ bazel-monorepo
 bazel-out
 bazel-testlogs
 target/
+.vscode

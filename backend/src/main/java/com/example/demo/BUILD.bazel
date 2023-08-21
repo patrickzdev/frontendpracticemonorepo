@@ -1,0 +1,19 @@
+java_library(
+    name = "demo",
+    srcs = glob(["*.java"]),
+    visibility = ["//backend/src:__subpackages__"],
+    deps = [
+        "@maven//:org_springframework_spring_web",
+        "@maven//:org_springframework_boot_spring_boot",
+        "@maven//:org_springframework_boot_spring_boot_autoconfigure"
+    ],
+)
+
+
+java_binary(
+    name = "app",
+    main_class = "com.example.demo.DemoApplication",
+    runtime_deps = [
+        ":demo",
+    ],
+)
