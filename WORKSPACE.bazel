@@ -88,6 +88,7 @@ maven_install(
         "org.springframework.boot:spring-boot-test:3.1.2",
         "org.springframework.boot:spring-boot:3.1.2",
         "org.springframework.boot:spring-boot-autoconfigure:3.1.2",
+        "org.springframework.boot:spring-boot-starter-web:3.1.2",
         "org.springframework:spring-context:6.0.11",
         "org.junit.jupiter:junit-jupiter-api:5.10.0",
         "org.junit.jupiter:junit-jupiter-engine:5.10.0",
