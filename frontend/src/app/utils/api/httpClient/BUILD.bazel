@@ -1,0 +1,52 @@
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
+
+SRCS = [
+    "HTTPClient.ts",
+    "IHTTPClientTypes.ts"
+]
+
+SPECS = [
+    "HTTPClient.test.ts"
+]
+
+ts_project(
+    name = "httpclient",
+    srcs = SRCS,
+    declaration = True,
+    resolve_json_module = True,
+    allow_js = True,
+    preserve_jsx = True,
+    tsconfig = "//frontend:tsconfig",
+    deps = [
+        "//frontend:node_modules/axios"
+    ],
+     visibility = ["//visibility:public"]
+)
+
+ts_project(
+    name = "httpclient_test",
+    srcs = SPECS,
+    declaration = True,
+    resolve_json_module = True,
+    allow_js = True,
+    preserve_jsx = True,
+    tsconfig = "//frontend:tsconfig",
+    deps = [
+        ":httpclient",
+        "//frontend:node_modules/@types/jest",
+        "//frontend:node_modules/axios"
+    ],
+)
+
+jest_test(
+    name = "jest_test",
+    config = "//frontend:jestconfig",
+    data = [
+        ":httpclient_test",
+        "//frontend:node_modules",
+        "//frontend:packagejson"
+    ],
+    node_modules = "//frontend:node_modules",
+    tags = ["jest"],
+)
