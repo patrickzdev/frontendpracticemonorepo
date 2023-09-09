@@ -1,7 +1,7 @@
 java_library(
     name = "application",
     srcs = glob(["*.java"]),
-    visibility = ["//backend/src:__subpackages__"],
+    visibility = ["//backend/account-service:__subpackages__"],
     deps = [
         "@maven//:org_springframework_spring_web",
         "@maven//:org_springframework_boot_spring_boot",

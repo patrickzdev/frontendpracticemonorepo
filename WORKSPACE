@@ -124,3 +124,37 @@ contrib_rules_jvm_deps()
 load("@contrib_rules_jvm//:setup.bzl", "contrib_rules_jvm_setup")
 
 contrib_rules_jvm_setup()
+
+#Docker Setup
+
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "b1e80761a8a8243d03ebca8845e9cc1ba6c82ce7c5179ce2b295cd36f7e394bf",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.25.0/rules_docker-v0.25.0.tar.gz"],
+)
+
+
+load("@io_bazel_rules_docker//repositories:repositories.bzl",container_repositories = "repositories")
+
+container_repositories()
+
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
+
+load("@io_bazel_rules_docker//container:pull.bzl", "container_pull")
+
+load(
+    "@io_bazel_rules_docker//java:image.bzl",
+    _java_image_repos = "repositories",
+)
+
+_java_image_repos()
+
+container_pull(
+  name = "java_base_image",
+  registry = "index.docker.io",
+  repository = "amazoncorretto",
+  tag = "17"
+)
