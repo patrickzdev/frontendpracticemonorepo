@@ -1,0 +1,30 @@
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
+
+
+pkg_tar(
+    name = "tar",
+    srcs = ["//backend/account-service/src/main/java/com/app/start:account-service-bin_deploy.jar"],
+    include_runfiles = True,
+    strip_prefix = ".",
+)
+
+oci_image(
+    name = "account-service-image",
+    base = "@distroless_java",
+    entrypoint = [
+        "java",
+        "-jar",
+        "/src/main/java/com/app/start/account-service-bin_deploy.jar",
+    ],
+    tars = [":tar"],
+)
+
+# Run a local container with:
+# $ bazel run  //backend/account-service:account-service-tarball
+# $ docker run --rm bazel/account-service:latest
+oci_tarball(
+    name = "account-service-tarball",
+    image = ":account-service-image",
+    repo_tags = ["bazel/account-service:latest"],
+)

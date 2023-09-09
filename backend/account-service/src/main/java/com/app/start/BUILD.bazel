@@ -1,6 +1,4 @@
 load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
-load("@io_bazel_rules_docker//java:image.bzl", "java_image")
-
 
 java_library(
     name = "start",
@@ -32,14 +30,13 @@ java_junit5_test(
     ]
 )
 
-java_image(
-    name = "account-service",
+java_binary(
+    name = "account-service-bin",
     main_class = "com.app.start.Application",
-    visibility = ["//backend/account-service:__subpackages__"],
     runtime_deps = [
         ":start",
     ],
-    base = "@java_base_image//image"
+    visibility = ["//backend/account-service:__subpackages__"]
 )
 
 load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
