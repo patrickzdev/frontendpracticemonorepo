@@ -1,0 +1,34 @@
+load("@contrib_rules_jvm//java:defs.bzl", "java_junit5_test")
+
+java_library(
+    name = "presentation",
+    srcs = glob(["*Controller.java"]),
+    visibility = ["//backend/src:__subpackages__"],
+    deps = [
+        "//backend/src/main/java/com/app/application:application",
+        "@maven//:org_springframework_spring_web",
+        "@maven//:org_springframework_boot_spring_boot",
+        "@maven//:org_springframework_boot_spring_boot_autoconfigure",
+        "@maven//:org_springframework_boot_spring_boot_starter_web"
+    ],
+)
+
+java_junit5_test(
+    name = "HelloControllerTest",
+    size = "small",
+    srcs = glob(["*ControllerTest.java"]),
+    deps = [
+        ":presentation",
+        "//backend/src/main/java/com/app/application",
+        "@maven//:org_springframework_boot_spring_boot_test",
+        "@maven//:org_springframework_spring_test",
+        "@maven//:org_junit_jupiter_junit_jupiter_api",
+        "@maven//:org_junit_jupiter_junit_jupiter_engine",
+        "@maven//:org_junit_platform_junit_platform_launcher",
+        "@maven//:org_junit_platform_junit_platform_reporting",
+        "@maven//:org_mockito_mockito_core",
+        "@maven//:org_mockito_mockito_junit_jupiter",
+        "@maven//:org_assertj_assertj_core"
+
+    ]
+)
