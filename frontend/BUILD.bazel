@@ -2,11 +2,19 @@ load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@aspect_rules_js//js:defs.bzl", "js_run_binary", "js_run_devserver")
+load("@npm//frontend:next/package_json.bzl", next_bin = "bin")
+load("@rules_pkg//:pkg.bzl", "pkg_tar")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
+
+
 
 npm_link_all_packages(
     name = "node_modules"
 )
 
+next_bin.next_binary(
+    name = "next_js_binary",
+)
 ts_config(
     name = "tsconfig",
     src = "tsconfig.json",
@@ -17,6 +25,25 @@ js_library(
     name = "packagejson",
     srcs = ["package.json"],
     visibility = ["//visibility:public"],
+)
+
+js_run_binary(
+    name = "build",
+    tool = "next_js_binary",
+    args = ["build"],
+    srcs = [
+        "next.config.js",
+        "//frontend:node_modules/next",
+        "//frontend:node_modules/react",
+        "//frontend:node_modules/react-dom",
+        "//frontend:node_modules/typescript",
+        "//frontend/src/app:pages",
+        "//frontend/src/app:styles",
+        "//frontend/public:public",
+    ],
+    out_dirs = [".next"],
+    visibility = ["//visibility:public"],
+    chdir = "frontend",
 )
 
 js_run_devserver(

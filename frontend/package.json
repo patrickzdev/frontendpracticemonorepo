@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "ibazel run //frontend:dev",
-    "build": "next build",
+    "build": "bazel build //frontend:build",
     "start": "next start",
     "lint": "next lint"
   },
