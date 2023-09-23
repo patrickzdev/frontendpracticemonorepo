@@ -157,6 +157,16 @@ oci_pull(
     image = "gcr.io/distroless/java17"
 )
 
+oci_pull(
+    name = "distroless_nodejs",
+    image = "node:latest",
+    platforms = [
+        "linux/amd64",
+        "linux/arm64",
+    ],
+)
+
+
 http_archive(
     name = "rules_pkg",
     urls = [

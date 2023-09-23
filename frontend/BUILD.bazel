@@ -1,7 +1,7 @@
 load("@npm//:defs.bzl", "npm_link_all_packages")
 load("@aspect_rules_ts//ts:defs.bzl", "ts_config")
 load("@aspect_rules_js//js:defs.bzl", "js_library")
-load("@aspect_rules_js//js:defs.bzl", "js_run_binary", "js_run_devserver")
+load("@aspect_rules_js//js:defs.bzl", "js_run_binary", "js_run_devserver" ,"js_image_layer", "js_binary")
 load("@npm//frontend:next/package_json.bzl", next_bin = "bin")
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
 load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
@@ -46,6 +46,7 @@ js_run_binary(
     chdir = "frontend",
 )
 
+
 js_run_devserver(
     name = "dev",
     args = ["dev"],
@@ -68,4 +69,42 @@ js_library(
     srcs = ["jest.config.js"],
     visibility = ["//visibility:public"],
 )
+
+
+genrule(
+    name = "nodemodules",
+    outs = ["node_modules.tar"],
+    srcs = [
+        "//frontend:node_modules",
+    ],
+    cmd_bash = """
+    tar hcvf "$@" --transform 's|$(RULEDIR)||' $(SRCS)
+    """
+)
+
+
+pkg_tar(
+    name = "nextfolder",
+    strip_prefix = ".",
+    srcs = [":build"] 
+)
+
+oci_image(
+    name = "frontend-image",
+    base = "@distroless_nodejs",
+    entrypoint = [
+        "./node_modules/.bin/next",
+        "start"
+    ],
+    tars = ["node_modules.tar" , ":nextfolder"]
+)
+# Run a local container with:
+# $ bazel run  //frontend:frontend-tarball
+# $ docker run --rm bazel/frontend:latest
+oci_tarball(
+    name = "frontend-tarball",
+    image = ":frontend-image",
+    repo_tags = ["bazel/frontend:latest"],
+)
+
 
