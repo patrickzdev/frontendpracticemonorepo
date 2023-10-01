@@ -1,0 +1,44 @@
+load("@bazel_skylib//rules:diff_test.bzl", "diff_test")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+load("//:bzlrules/write_digest_from_oci.bzl", "write_digest_from_oci")
+
+# Config:
+# Map from some source file to a target that produces it.
+# This recipe assumes you already have some such targets.
+_GENERATED = {
+    "some-source": "//:account-service-image-digest"
+    # ...
+}
+
+# Generate the updater script so there's only one target for devs to run,
+# even if many generated files are in the source folder.
+write_file(
+    name = "gen_update",
+    out = "update.sh",
+    content = [
+        # This depends on bash, would need tweaks for Windows
+        "#!/usr/bin/env bash",
+        # Bazel gives us a way to access the source folder!
+        "cd $BUILD_WORKSPACE_DIRECTORY",
+    ] + [
+        # Paths are now relative to the workspace.
+        # We can copy files from bazel-bin to the sources
+        "cp -fv bazel-bin/{1} {0}".format(
+            k,
+            # Convert label to path
+            v.replace(":", "/"),
+        )
+        for [k, v] in _GENERATED.items()
+    ],
+)
+write_digest_from_oci(
+    name = "account-service-image-digest",
+    input = "//backend/account-service:account-service-image",
+)
+
+# This is what you can `bazel run` and it can write to the source folder
+sh_binary(
+    name = "update",
+    srcs = ["update.sh"],
+    data = _GENERATED.values(),
+)

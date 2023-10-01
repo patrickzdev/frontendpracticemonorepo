@@ -177,3 +177,16 @@ http_archive(
 )
 load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 rules_pkg_dependencies()
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "aspect_bazel_lib",
+    sha256 = "e9505bd956da64b576c433e4e41da76540fd8b889bbd17617fe480a646b1bfb9",
+    strip_prefix = "bazel-lib-1.35.0",
+    url = "https://github.com/aspect-build/bazel-lib/releases/download/v1.35.0/bazel-lib-v1.35.0.tar.gz",
+)
+
+load("@aspect_bazel_lib//lib:repositories.bzl", "aspect_bazel_lib_dependencies")
+
+aspect_bazel_lib_dependencies()

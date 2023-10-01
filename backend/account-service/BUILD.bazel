@@ -18,6 +18,8 @@ oci_image(
         "/src/main/java/com/app/start/account-service-bin_deploy.jar",
     ],
     tars = [":tar"],
+    visibility = ["//visibility:public"],
+
 )
 
 # Run a local container with:

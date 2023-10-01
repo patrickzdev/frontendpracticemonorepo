@@ -4,7 +4,7 @@ load("@aspect_rules_js//js:defs.bzl", "js_library")
 load("@aspect_rules_js//js:defs.bzl", "js_run_binary", "js_run_devserver" ,"js_image_layer", "js_binary")
 load("@npm//frontend:next/package_json.bzl", next_bin = "bin")
 load("@rules_pkg//:pkg.bzl", "pkg_tar")
-load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball")
+load("@rules_oci//oci:defs.bzl", "oci_image", "oci_tarball", "oci_push")
 
 
 
@@ -96,7 +96,8 @@ oci_image(
         "./node_modules/.bin/next",
         "start"
     ],
-    tars = ["node_modules.tar" , ":nextfolder"]
+    tars = ["node_modules.tar" , ":nextfolder"],
+    visibility = ["//visibility:public"]
 )
 # Run a local container with:
 # $ bazel run  //frontend:frontend-tarball
@@ -107,4 +108,9 @@ oci_tarball(
     repo_tags = ["bazel/frontend:latest"],
 )
 
+oci_push(
+    name = "push_frontend_image",
+    image = ":frontend-image",
+    repository="aa"
+)
 
